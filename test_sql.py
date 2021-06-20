@@ -38,7 +38,7 @@ def test_create_and_insert(db):
     items = run_query(db, "select title from books")
     assert set(x[0] for x in items) == set(["The C Programming Language","The Go Programming Language","The UNIX Programming Environment","Cryptonomicon","Deep Work","Atomic Habits","The City and The City","The Great War for Civilisation"]), "Book titles mismatch"
 
-    items = run_query(db, "select name from subjects")  
+    items = run_query(db, "select name from subjects")
     assert set(x[0] for x in items) == set(["C","UNIX","Technology","Science Fiction","Productivity","Psychology","Politics","History","Go"]), "Subjects mismatch"
 
 
@@ -57,7 +57,7 @@ def test_run_query2(db):
 
     assert set(items) == expected
 
-    
+
 def test_run_query3(db):
     with open("query3.sql") as f:
         query = f.read()
@@ -81,18 +81,16 @@ def test_run_update1(db):
 
     items = run_query(db, "select name from publisher")
     assert set (x[0] for x in items) == set(["Prentice Hall","Harper","GCP","Avery","Del Rey","Vintage"]), "Publisher mismatch"
-    
+
 def test_run_delete(db):
     cur = db.cursor()
     with open("delete1.sql") as f:
         cur.executescript(f.read())
     cur.close()
 
-    items = run_query(db, "select s.name from books b, subjects s, books_subjects bs where b.id = bs.book and s.id = bs.subject and b.title = 'The Great War for Civilisation'");
+    items = run_query(db, "select s.name from books b, subjects s, books_subjects bs where b.id = bs.books_id and s.id = bs.subjects_id and b.title = 'The Great War for Civilisation'");
     expected = set(["Politics"])
     assert set(x[0] for x in items) == expected
 
-    items = run_query(db, "select name from subjects")  
+    items = run_query(db, "select name from subjects")
     assert set(x[0] for x in items) == set(["C","UNIX","Technology","Science Fiction","Productivity","Psychology","Politics","Go"]), "Subjects mismatch"
-
-    
